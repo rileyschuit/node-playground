@@ -1,0 +1,46 @@
+
+var express = require('express');
+var bodyParser = require('body-parser');
+var http = require('http');
+var path = require('path');
+var app = express();
+var expressSession = require('express-session');
+var mongoStore = require('connect-mongo')(express);
+var mongoose = require('mongoose');
+require('./models/users_model.js');
+//var conn = mongoose.connect('mongodb://localhost/pizzas');
+var config = require('./configuration.json');
+
+app.configure(function () {
+  app.set('ip', process.env.IP || config.site.ip);
+  app.set('port', process.env.PORT || config.site.port);
+  app.set('views', path.join(__dirname, 'views'));
+  app.set('view engine', 'jade');
+  app.set('view options', {layout: false});
+   app.use(express.urlencoded());
+   app.use(express.methodOverride());
+   app.use(express.cookieParser(config.site.cookiename));
+   app.use(express.session({
+     secret: config.secret,
+     maxAge: new Date(Date.now() + 604800),
+     store: new mongoStore(config.db)
+   }));
+  app.use(express.static(path.join(__dirname, 'public')));
+});
+
+var dbUrl = 'mongodb://';
+// TODO:  Add logic to check for null values
+dbUrl += config.db.username + ':' + config.db.password + '@' + config.db.host + ':' + config.db.port + '/' + config.db.db
+//dbUrl += config.db.host + ':' + config.db.port;
+//dbUrl += '/' + config.db.db;
+mongoose.connect(dbUrl);
+mongoose.connection.on('open', function () {
+});
+
+// routes
+require('./routes')(app);
+
+// Uses site.ip, site.port to setup destination IP:Port
+http.createServer(app).listen(app.get('port'), app.get('ip'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});

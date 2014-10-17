@@ -1,0 +1,17 @@
+{
+  "site" : {
+    "ip" : "0.0.0.0",                                                                                                                                                     
+    "port" : "8080",
+    "state" : "development",
+    "cookiename" : "chocolate",
+    "secret" : "secretsauce"
+  },
+  "db" : {
+    "db": "pizzas",
+    "host": "localhost",
+    "port": 27017,
+    "username": "",
+    "password": "",
+    "collection": "sessions"
+  }
+}
