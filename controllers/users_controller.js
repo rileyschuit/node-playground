@@ -5,23 +5,19 @@ function hashPW(pwd){
   return crypto.createHash('sha256').update(pwd).
          digest('base64').toString();
 }
-// Format of User Method Names:
-// "/user/create" = UserCreate
-// "/user/update" = UserUpdate
-// etc...
+// User Creation
 exports.UserCreate = function(req, res){
   var user = new User({username:req.body.username});
   user.set('hashed_password', hashPW(req.body.password));
   user.set('email', req.body.email);
   user.set('sec_question', req.body.sec_question);
   user.set('sec_answer', req.body.sec_answer);
-  // TODO: Add when view is updated for type
-  //user.set('type', req.body.type);
   user.save(function(err) {
     if (err){
       res.session.error = err;
       res.redirect('/user/create');
     } else {
+      //TODO:  Add logic to check configuration file for user regirstration
       //req.session.user = user.id;
       //req.session.username = user.username;
       //req.session.msg = 'Authenticated as ' + user.username;
@@ -29,7 +25,8 @@ exports.UserCreate = function(req, res){
     }
   });
 };
-exports.login = function(req, res){
+// User Login
+exports.UserLogin = function(req, res){
   User.findOne({ username: req.body.username })
   .exec(function(err, user) {
     if (!user){
@@ -42,54 +39,50 @@ exports.login = function(req, res){
         req.session.msg = 'Authenticated as ' + user.username;
         res.redirect('/');
       });
-    } else {
+    }else{
       err = 'Authentication failed.';
     }
     if(err){
       req.session.regenerate(function(){
         req.session.msg = err;
-        res.redirect('/login');
+        res.redirect('/user/login');
       });
     }
   });
 };
 // View to update user profile
-// Current issue:  User session variables are not populating
-exports.UserProfile = function(req, res) {
+exports.getUserProfile = function(req, res) {
+  // TODO:  Modify views to include ID in request and populate the form
   User.findOne({ _id: req.session.user })
   .exec(function(err, user) {
-    user.save(function(err) {
-      if (err){
-        res.session.error = err;
-      } else {
-        req.session.msg = 'User Updated.';
-      }
-    });
+    if (!user){
+      res.json(404, {err: 'User Not Found.'});
+    } else {
+      res.json(user);
+    }
   });
 };
-// Update user data 
-// Curruent issue:  req.session.msg not seen
+// Update user data.
 exports.UserUpdate = function(req, res){
   User.findOne({ _id: req.session.user })
   .exec(function(err, user) {
-    user.set('hashed_password', hashPW(req.body.password));
     user.set('email', req.body.email);
+    user.set('color', req.body.color);
     user.set('sec_question', req.body.sec_question);
     user.set('sec_answer', req.body.sec_answer);
-    //user.set('type', req.body.type);
     user.save(function(err) {
       if (err){
-        res.session.error = err;
+        res.sessor.error = err;
       } else {
         req.session.msg = 'User Updated.';
       }
-      res.redirect('/user/profile');
+      res.redirect('/user/profile/modify');
     });
   });
 };
-  //TODO: Test when view is created
+//TODO: Test when view is created
 exports.UserDelete = function(req, res){
-  User.findOne({ _id: req.user })
+  User.findOne({ _id: req.session.user })
   .exec(function(err, user) {
     if(user){
       user.remove(function(err){
@@ -115,6 +108,7 @@ exports.UserList = function(req, res) {
       res.json(404, {msg: 'No Users found'})
     } else {
       res.json(users);
-    }
+    };
   });
 };
+

@@ -1,4 +1,4 @@
-angular.module('myApp', []).
+angular.module('Riley-Playground', []).
   controller('myController', ['$scope', '$http', 
                               function($scope, $http) {
     $http.get('/user/profile')

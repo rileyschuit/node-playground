@@ -1,0 +1,23 @@
+<!doctype html>
+<html ng-app="Riley-Playground">
+<head>
+  <title>User Login and Sessions</title>
+  <link rel="stylesheet" type="text/css" 
+      href="/public/css/bootstrap.min.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Login Page</h1>
+    <p class="lead">Add your creds below.</p>
+    <br>
+    <form role="form" action="/user/login" method="POST" style="max-width: 300px;">
+      <div class="form-group">
+        <input type="text" name="username" placeholder="Enter Username" class="form-control"></div>
+      <div class="form-group">
+        <input type="password" name="password" placeholder="Password" class="form-control"></div>
+      <button type="submit" class="btn btn-default">Submit</button>&nbsp;
+      <a href="/"><button type="button" class="btn btn-primary">Cancel</button></a>
+</form>
+</div>
+<hr><%= msg %> 
+</html>

@@ -8,14 +8,16 @@ var expressSession = require('express-session');
 var mongoStore = require('connect-mongo')(express);
 var mongoose = require('mongoose');
 require('./models/users_model.js');
-//var conn = mongoose.connect('mongodb://localhost/pizzas');
 var config = require('./configuration.json');
 
 app.configure(function () {
   app.set('ip', process.env.IP || config.site.ip);
   app.set('port', process.env.PORT || config.site.port);
   app.set('views', path.join(__dirname, 'views'));
-  app.set('view engine', 'jade');
+  //temp for fix:
+  app.engine('.html', require('ejs').__express);
+  //app.set('view engine', 'jade');
+  app.set('view engine', 'html');
   app.set('view options', {layout: false});
    app.use(express.urlencoded());
    app.use(express.methodOverride());
@@ -25,14 +27,11 @@ app.configure(function () {
      maxAge: new Date(Date.now() + 604800),
      store: new mongoStore(config.db)
    }));
-  app.use(express.static(path.join(__dirname, 'public')));
 });
 
+//Connect to mongodb, refer to configuration file
 var dbUrl = 'mongodb://';
-// TODO:  Add logic to check for null values
 dbUrl += config.db.username + ':' + config.db.password + '@' + config.db.host + ':' + config.db.port + '/' + config.db.db
-//dbUrl += config.db.host + ':' + config.db.port;
-//dbUrl += '/' + config.db.db;
 mongoose.connect(dbUrl);
 mongoose.connection.on('open', function () {
 });

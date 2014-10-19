@@ -5,23 +5,25 @@ module.exports = function(app) {
   app.use('/public', express.static( './public'));
   app.get('/', function(req, res){
     if (req.session.user) {
-      res.render('Index', {user: req.session.username, msg:req.session.msg});
+      res.render('index', {username: req.session.username,
+                          msg:req.session.msg});
     } else {
-      //req.session.msg = 'Access denied!';
+      req.session.msg = 'Access denied!';
       res.redirect('/user/login');
     }
   });
-  app.get('/user/profile', function(req, res){
+  app.get('/user/profile/modify', function(req, res){
     if (req.session.user) {
-      res.render('UserProfile', {msg:req.session.msg});
+      res.render('UserProfileModify', {msg:req.session.msg});
     } else {
       req.session.msg = 'Access denied!';
-      res.redirect('/login');
+      res.redirect('/user/login');
     }
   });
   app.get('/user/create', function(req, res){
-    if(req.session.username !== "admin"){
+    if(req.session.username !== 'admin'){
       res.redirect('/');
+      req.session.msg = 'Access denied!';
     }
     res.render('UserCreate', {msg:req.session.msg});
   });
@@ -36,13 +38,10 @@ module.exports = function(app) {
       res.redirect('/user/login');
     });
   });
-  app.get('/user/list', users.UserList);
-  app.post('/user/login', users.login);
   app.post('/user/create', users.UserCreate);
   app.post('/user/update', users.UserUpdate);
-  
-  //TODO:  Need delete option when user list is complete
-  //app.post('/user/delete', users.DeleteUser);
-  //TODO:  Make pretty with render
-  //app.get('/user/profile', users.UserProfile);
+  app.post('/user/delete', users.UserDelete);
+  app.post('/user/login', users.UserLogin);
+  app.get('/user/profile', users.getUserProfile);
+  app.get('/user/list', users.UserList);
 }
