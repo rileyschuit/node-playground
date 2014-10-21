@@ -1,4 +1,19 @@
-<html>
-  <% users.forEach( function( user ){ %>
-    <p><%= user.username %></p>
-    <% }); %>
+<!doctype html>
+<html ng-app="Riley-Playground">
+  <body>
+   <div class="container" ng-controller="UserList">
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>UserName</th>
+        <th>Email</th>
+        </tr>
+        <tr ng-repeat="person in people">
+          <td>{{users.id}}</td>
+          <td>{{users.username}}</td>
+          <td>{{users.email}}</td>
+      </tr>
+    </table>
+  </body>
+</div>
+</div>

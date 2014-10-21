@@ -6,14 +6,17 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "*"
+    "express": "3.4.8",
+    "express-session": "*",
+    "passport-local": "*",
+    "ejs": "*",
     "jade": "*",
-    "body-parser": "*",
     "mongoose": "*",
     "connect-mongo": "*",
-    "jsonfile": "*"
+    "jsonfile": "*",
+    "body-parser": "*"
   },
   "main": "app.js",
   "devDependencies": {},
-  "author": "Riley Schuiti"
+  "author": "Riley Schuit"
 }

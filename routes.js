@@ -43,5 +43,10 @@ module.exports = function(app) {
   app.post('/user/delete', users.UserDelete);
   app.post('/user/login', users.UserLogin);
   app.get('/user/profile', users.getUserProfile);
-  app.get('/user/list', users.UserList);
-}
+  app.get('/user/list/json', users.UserList);
+  app.get('/user/list', function(req, res){
+    res.render('UserList', {
+      list: users.UserList
+    });
+});
+};
