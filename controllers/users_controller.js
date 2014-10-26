@@ -101,7 +101,7 @@ exports.UserDelete = function(req, res){
     }
   });
 };
-exports.UserList = function(req, res) {
+exports.UserListJSON = function(req, res) {
   User.find()
   .exec(function(err, users) {
     if (!users) {
