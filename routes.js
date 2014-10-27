@@ -26,7 +26,7 @@ module.exports = function(app) {
       res.redirect('/');
       req.session.msg = 'Access denied!';
     }
-    res.render('UserCreate', {msg:req.session.msg});
+    res.render('AdminUserCreate', {msg:req.session.msg});
   });
   app.get('/user/login',  function(req, res){
     if(req.session.user){
@@ -39,16 +39,17 @@ module.exports = function(app) {
       res.redirect('/user/login');
     });
   });
-  /* app.get('/user/modify', function(req, res, next){
-    if(req.session.username !== 'admin'){
+  // Admin - modify user
+  app.get('/admin/modify/:id/json', users.UserModifyJSON);
+  app.get('/admin/modify/:id', function(req, res){
+    if (req.session.user !== admin) {
       res.redirect('/');
-      eq.session.msg = 'Access denied!';
+      req.session.msg = 'Access denied';
     } else {
-      //TODO: Need to find username in request, query, then fill out form
-      res.render('UserModify', {msg:req.session.msg});
+      res.render('AdminProfileModify');
+    }
   });
-  */
-  app.post('/user/create', users.UserCreate);
+  app.post('/admin/create', users.UserCreate);
   app.post('/user/update', users.UserUpdate);
   app.post('/user/delete', users.UserDelete);
   app.post('/user/login', users.UserLogin);

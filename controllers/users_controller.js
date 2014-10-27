@@ -5,7 +5,25 @@ function hashPW(pwd){
   return crypto.createHash('sha256').update(pwd).
          digest('base64').toString();
 }
-// User Creation
+exports.Initialization = function(callback) {
+  User.findOne({ username: 'admin' })
+  .exec(function(err,user){
+    if (!user) {
+      err = 'No admin user!  Better create one (admin/admin)';
+      var user= new User({username: 'admin'});
+      user.set('password', hashPW());
+      user.save(function() {
+        if (err){
+          res.session.error = err;
+          console.log(err);
+        } else {
+          console.log('there is an admin user, no need ot create one');
+        }
+      });
+    };
+  });
+};
+// Admin - User Creation
 exports.UserCreate = function(req, res){
   var user = new User({username:req.body.username});
   user.set('hashed_password', hashPW(req.body.password));
@@ -25,7 +43,7 @@ exports.UserCreate = function(req, res){
     }
   });
 };
-// User Login
+// Public - User Login
 exports.UserLogin = function(req, res){
   User.findOne({ username: req.body.username })
   .exec(function(err, user) {
@@ -50,9 +68,8 @@ exports.UserLogin = function(req, res){
     }
   });
 };
-// View to update user profile
+// User - JSON profile data
 exports.getUserProfile = function(req, res) {
-  // TODO:  Modify views to include ID in request and populate the form
   User.findOne({ _id: req.session.user })
   .exec(function(err, user) {
     if (!user){
@@ -62,7 +79,7 @@ exports.getUserProfile = function(req, res) {
     }
   });
 };
-// Update user data.
+// User - update user details
 exports.UserUpdate = function(req, res){
   User.findOne({ _id: req.session.user })
   .exec(function(err, user) {
@@ -80,6 +97,7 @@ exports.UserUpdate = function(req, res){
     });
   });
 };
+// Admin - Delete User
 //TODO: Test when view is created
 exports.UserDelete = function(req, res){
   User.findOne({ _id: req.session.user })
@@ -101,6 +119,7 @@ exports.UserDelete = function(req, res){
     }
   });
 };
+// Admin - JSON data of User list and user details from user collection 
 exports.UserListJSON = function(req, res) {
   User.find()
   .exec(function(err, users) {
@@ -111,4 +130,14 @@ exports.UserListJSON = function(req, res) {
     };
   });
 };
-
+// Admin - find user for modification
+exports.UserModifyJSON = function(req, res) {
+  User.findOne({ username: req.params.id})
+  .exec(function(err, users) {
+    if (!users) {
+      res.json(404, {msg: 'No User found'})
+    } else {
+      res.json(users);
+    };
+  });
+};

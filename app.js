@@ -39,6 +39,11 @@ mongoose.connection.on('open', function () {
 // routes
 require('./routes')(app);
 
+//TODO:  This doesn't work right, trying to check admin acount with user controller method
+// Initall Application startup, check if admin exists, if not, create with admin as the password
+var init = require('./controllers/users_controller.js').Initilization;
+init;
+
 // Uses site.ip, site.port to setup destination IP:Port
 http.createServer(app).listen(app.get('port'), app.get('ip'), function(){
   console.log('Express server listening on port ' + app.get('port'));
