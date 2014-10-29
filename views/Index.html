@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="Riley-Playground">
+<html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +23,10 @@
           <a class="navbar-brand" href="/">Playground</a>
         </div>
           <form role="form" class="navbar-form navbar-right"> 
-            <a class="navbar-brand"><a href="/user/profile/modify", class="btn btn-sm btn-success"><%= username %></a> <a href="/user/logout", class="btn btn-sm btn-danger"> Logout</a>
+            <a class="navbar-brand">
+              <% if (username == 'admin') { %> <a href="/admin/user/list", class="btn btn-sm btn-primary"> Manage </a> <% } %>
+              <a href="/user/profile/modify", class="btn btn-sm btn-success"><%= username %></a> 
+              <a href="/user/logout", class="btn btn-sm btn-danger"> Logout</a>
           </form>
         </div>
       </div>
@@ -34,7 +37,7 @@
         <br>
         <p>This is the beginning of a project.  Currently it's setup to authenticate and create.  Authorization for the admin user is required to access /user/create</p>
         <p><a class="btn btn-primary btn-lg" href="/user/profile/modify/" role="button">Edit your profile &raquo;</a>
-          <a class="btn btn-primary btn-lg" href="/user/create/" role="button">Create a new user</a></p>
+          <a class="btn btn-primary btn-lg" href="/admin/user/create/" role="button">Create a new user</a></p>
       </div>
     </div>
     <script src="/public/js/bootstrap.min.js"></script>

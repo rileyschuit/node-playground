@@ -1,29 +1,54 @@
 <!doctype html>
 <html>
-<head>
-  <title>User Login and Sessions</title>
-  <link rel="stylesheet" type="text/css" 
-      href="/public/css/bootstrap.min.css" />
-</head>
-<body>
-  <div class="container">
-    <h1>Register Page</h1><p class="lead">Say something worthwhile here.</p><br>
-    <form role="form" action="/create" method="post" style="max-width: 300px;">
-      <div class="form-group">
-        <input type="text" name="username" placeholder="Username:" class="form-control"></div>
-      <div class="form-group">
-        <input type="password" name="password" placeholder="Password:" class="form-control"></div>
-      <div class="form-group">
-        <input type="type" name="email" placeholder="Email" class="form-control"></div>
-      <div class="form-group">
-        <input type="text" name="sec_question" placeholder="Security Question" class="form-control"></div>
-      <div class="form-group">
-        <input type="text" name="sec_answer" placeholder="Security Answer" class="form-control"></div>
-      <button type="submit" class="btn btn-default">Submit</button>&nbsp;<a href="/"><button type="button" class="btn btn-primary">Cancel</button></a>
-    </form>
-  </div>
-  <hr><%= msg %>
-</body>
-<script src="/public/js/bootstrap.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <head>
+    <meta charset="utf-9">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Playground</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/public/cssjumbotron.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Playground</a>
+        </div>
+        <form role="form" class="navbar-form navbar-right">
+          <a class="navbar-brand">
+            <% if (username == 'admin') { %> <a href="/admin/user/list", class="btn btn-sm btn-primary"> Manage </a> <% } %>
+            <a href="/user/profile/modify", class="btn btn-sm btn-success"><%= username %></a>
+            <a href="/user/logout", class="btn btn-sm btn-danger"> Logout</a>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h1>Create User</h1><p class="lead">Fill out the following for a new user:</p><br>
+      <form role="form" action="/admin/user/create" method="post" style="max-width: 300px;">
+        <div class="form-group">
+          <input type="text" name="username" placeholder="Username:" class="form-control"></div>
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Password:" class="form-control"></div>
+        <div class="form-group">
+          <input type="type" name="email" placeholder="Email" class="form-control"></div>
+        <div class="form-group">
+          <input type="text" name="sec_question" placeholder="Security Question" class="form-control"></div>
+        <div class="form-group">
+          <input type="text" name="sec_answer" placeholder="Security Answer" class="form-control"></div>
+        <button type="submit" class="btn btn-default">Submit</button>&nbsp;<a href="/"><button type="button" class="btn btn-primary">Cancel</button></a>
+      </form>
+    </div>
+    <hr><%= msg %>
+  </body>
+  <script src="/public/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </html>

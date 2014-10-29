@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="Riley-Playground">
+<html>
 <head>
   <title>User Login and Sessions</title>
   <link rel="stylesheet" type="text/css" 
@@ -11,13 +11,13 @@
     <form role="form" action="/user/profile/update" method="POST" style="max-width: 300px;">
       <div class="form-group">
       UserName: <br>
-        <input type="text" placeholder="Username" name="username" ng-model="user.username" disabled class="form-control"></div>
+        <input type="text" placeholder="Username" name="username" disabled class="form-control"></div>
       <div class="form-group">
         Email Address:
-        <input type="email" placeholder="Email" name="email" ng-model="user.email" class="form-control" ></div>
+        <input type="email" placeholder="Email" name="email" class="form-control" ></div>
       <div class="form-group">
         Security Question:
-        <input type="text" placeholder="Security Question" name="sec_question" ng-model="user.sec_question" class="form-control"></div>
+        <input type="text" placeholder="Security Question" name="sec_question" class="form-control"></div>
       <div class="form-group">
         Security Answer:
         <input type="text" placeholder="Security Answer" name="sec_answer" ng-model="user.sec_answer" class="form-control"></div>
@@ -30,6 +30,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="/public/js/bootstrap.min.js"></script>
   <script src="http://code.angularjs.org/1.2.9/angular.min.js"></script>
-  <script src="/public/js/my_app.js"></script>
+  <script>
+    $(document).ready(function(){
+      $.getJSON('/user/profile/json', function(data) {
+        $('input[name="username"]').val(data["username"]);
+        $('input[name="email"]').val(data["email"]);
+        $('input[name="sec_question"]').val(data["sec_question"]);
+        $('input[name="sec_answer"]').val(data["sec_answer"]);
+      });
+    });
+  </script>
 </body>
 </html>
