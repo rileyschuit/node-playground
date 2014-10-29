@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-9">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playground</title>
+  <!-- Bootstrap core CSS -->
+  <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="/public/cssjumbotron.css" rel="stylesheet">
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Playground</a>
+      </div>
+      <form role="form" class="navbar-form navbar-right">
+        <a class="navbar-brand">
+          <% if (username == 'admin') { %> <a href="/admin/user/list", class="btn btn-sm btn-primary"> Manage </a> <% } %>
+          <a href="/user/profile/modify", class="btn btn-sm btn-success"><%= username %></a> 
+          <a href="/user/logout", class="btn btn-sm btn-danger"> Logout</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- Main jumbotron for a primary marketing message or call to action -->
+  <div class="jumbotron">
+    <div class="container">
+      <br>
+      <table class="table">
+      <thead>
+        <tr>
+        <th>UserName</th>
+        <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    </div>
+  </div>
+ 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(){
+    $.getJSON('/admin/user/list/json', function(data) {
+      var items = [];
+        $.each(data, function(key, val) {
+          items.push('<tr> <td>\n <a href="/admin/profile/modify/' + val.username + '">' + val.username + '</a></td> \n <td>' + val.email + '</td> \n </tr>' );
+         });
+         $('<tbody/>', {
+           html: items.join('')
+         }).appendTo('.table');
+    });
+    });
+  </script>
+</html>
