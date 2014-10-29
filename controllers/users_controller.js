@@ -5,6 +5,7 @@ function hashPW(pwd){
   return crypto.createHash('sha256').update(pwd).
          digest('base64').toString();
 }
+// TODO: Work this into intialization with first deployment
 exports.Initialization = function(callback) {
   User.findOne({ username: 'admin' })
   .exec(function(err,user){
@@ -21,26 +22,6 @@ exports.Initialization = function(callback) {
         }
       });
     };
-  });
-};
-// Admin - User Creation
-exports.UserCreate = function(req, res){
-  var user = new User({username:req.body.username});
-  user.set('hashed_password', hashPW(req.body.password));
-  user.set('email', req.body.email);
-  user.set('sec_question', req.body.sec_question);
-  user.set('sec_answer', req.body.sec_answer);
-  user.save(function(err) {
-    if (err){
-      res.session.error = err;
-      res.redirect('/user/create');
-    } else {
-      //TODO:  Add logic to check configuration file for user regirstration
-      //req.session.user = user.id;
-      //req.session.username = user.username;
-      //req.session.msg = 'Authenticated as ' + user.username;
-      res.redirect('/user/list');
-    }
   });
 };
 // Public - User Login
@@ -68,33 +49,26 @@ exports.UserLogin = function(req, res){
     }
   });
 };
-// User - JSON profile data
-exports.getUserProfile = function(req, res) {
-  User.findOne({ _id: req.session.user })
-  .exec(function(err, user) {
-    if (!user){
-      res.json(404, {err: 'User Not Found.'});
+//
+//
+// Admin - User Creation
+exports.UserCreate = function(req, res){
+  var user = new User({username:req.body.username});
+  user.set('hashed_password', hashPW(req.body.password));
+  user.set('email', req.body.email);
+  user.set('sec_question', req.body.sec_question);
+  user.set('sec_answer', req.body.sec_answer);
+  user.save(function(err) {
+    if (err){
+      res.session.error = err;
+      res.redirect('/user/create');
     } else {
-      res.json(user);
+      //TODO:  Add logic to check configuration file for user regirstration
+      //req.session.user = user.id;
+      //req.session.username = user.username;
+      //req.session.msg = 'Authenticated as ' + user.username;
+      res.redirect('/user/list');
     }
-  });
-};
-// User - update user details
-exports.UserUpdate = function(req, res){
-  User.findOne({ _id: req.session.user })
-  .exec(function(err, user) {
-    user.set('email', req.body.email);
-    user.set('color', req.body.color);
-    user.set('sec_question', req.body.sec_question);
-    user.set('sec_answer', req.body.sec_answer);
-    user.save(function(err) {
-      if (err){
-        res.sessor.error = err;
-      } else {
-        req.session.msg = 'User Updated.';
-      }
-      res.redirect('/user/profile/modify');
-    });
   });
 };
 // Admin - Delete User
@@ -139,5 +113,37 @@ exports.UserModifyJSON = function(req, res) {
     } else {
       res.json(users);
     };
+  });
+};
+//
+//
+//
+// User - JSON profile data
+exports.getUserProfile = function(req, res) {
+  User.findOne({ _id: req.session.user })
+  .exec(function(err, user) {
+    if (!user){
+      res.json(404, {err: 'User Not Found.'});
+    } else {
+      res.json(user);
+    }
+  });
+};
+// User - update user details
+exports.UserUpdate = function(req, res){
+  User.findOne({ _id: req.session.user })
+  .exec(function(err, user) {
+    user.set('email', req.body.email);
+    user.set('color', req.body.color);
+    user.set('sec_question', req.body.sec_question);
+    user.set('sec_answer', req.body.sec_answer);
+    user.save(function(err) {
+      if (err){
+        res.sessor.error = err;
+      } else {
+        req.session.msg = 'User Updated.';
+      }
+      res.redirect('/user/profile/modify');
+    });
   });
 };
