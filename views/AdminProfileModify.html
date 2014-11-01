@@ -8,7 +8,7 @@
 <body>
   <div class="container" ng-controller="myController">
     <h1>Modify User</h1><p class="lead">Modify YOUR Profile</p>
-    <form role="form" action="/user/profile/update" method="POST" style="max-width: 300px;">
+    <form role="form" action="/admin/profile/update" method="POST" style="max-width: 300px;">
       <div class="form-group">
       UserName: <br>
         <input type="text" placeholder="Username" name="username" disabled class="form-control"></div>
@@ -21,16 +21,12 @@
       <div class="form-group">
         Security Answer:
         <input type="text" placeholder="Security Answer" name="sec_answer" class="form-control"></div>
-      <a class="btn btn-primary btn-default" href="/user/profile/modify/" role="button">Update</a>
-      <!--
-      <form method="POST" action="/admin/user/delete"> <input type="submit" value="Delete User" class="btn btn-sm btn-danger">
-      -->
+      <a class="btn btn-primary btn-default" href="/admin/profile/update" role="button">Update</a>
       </div>
     </form>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="/public/js/bootstrap.min.js"></script>
-  <script src="http://code.angularjs.org/1.2.9/angular.min.js"></script>
   <script>
     $(document).ready(function(){
       var userid = window.location.pathname.split("/");
@@ -39,6 +35,7 @@
         $('input[name="email"]').val(data["email"]);
         $('input[name="sec_question"]').val(data["sec_question"]);
         $('input[name="sec_answer"]').val(data["sec_answer"]);
+        $form.attr('action', $form.attr('action').replace('user-to-delete', userid[4]));
       });
     });
   </script>

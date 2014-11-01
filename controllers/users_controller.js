@@ -72,23 +72,14 @@ exports.UserCreate = function(req, res){
   });
 };
 // Admin - Delete User
-//TODO: Test when view is created
 exports.UserDelete = function(req, res){
-  User.findOne({ _id: req.session.user })
-  .exec(function(err, user) {
-    if(user){
-      user.remove(function(err){
-        if (err){
+  User.findOne({ username: req.params.id })
+  .exec(function(err, username) {
+    if(username){
+      username.remove(function(err){
+        if (err) {
           req.session.msg = err;
-        }
-        req.session.destroy(function(){
-          res.redirect('/login');
-        });
-      });
-    } else{
-      req.session.msg = "User Not Found!";
-      req.session.destroy(function(){
-        res.redirect('/login');
+        } res.redirect('/admin/user/list');
       });
     }
   });
@@ -115,6 +106,23 @@ exports.UserModifyJSON = function(req, res) {
     };
   });
 };
+// TODO: something is borken here:
+// Admin - update user modification
+exports.AdminUserUpdate = function(req, res) {
+  User.findOne({_id : req.body.username})
+  .exec(function(err, user) {
+  user.set('email', req.body.email);
+  user.set('sec_question', req.body.sec_question);
+  user.set('sec_answer', req.body.sec_answer);
+  user.save(function(err) {
+    if (err) {
+      res.session.error = err;
+    } else {
+      res.session.msg = 'User Updated.';
+    } res.redirect('/admin/user/list');
+  });
+  });
+};
 //
 //
 //
@@ -134,12 +142,11 @@ exports.UserUpdate = function(req, res){
   User.findOne({ _id: req.session.user })
   .exec(function(err, user) {
     user.set('email', req.body.email);
-    user.set('color', req.body.color);
     user.set('sec_question', req.body.sec_question);
     user.set('sec_answer', req.body.sec_answer);
     user.save(function(err) {
       if (err){
-        res.sessor.error = err;
+        res.session.error = err;
       } else {
         req.session.msg = 'User Updated.';
       }

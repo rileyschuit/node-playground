@@ -18,12 +18,14 @@ module.exports = function(app) {
       res.render('AdminProfileModify');
     }
   });
+  // TODO:  Something is broken here, on this post.
+  app.post('/admin/profile/update', users.AdminUserUpdate); 
   app.get('/admin/user/create', function(req, res){
     if(req.session.username !== 'admin'){
       res.redirect('/');
       req.session.msg = 'Access denied!';
     }
-    res.render('AdminUserCreate', {msg:req.session.msg});
+    res.render('AdminUserCreate', {username: req.session.username, msg:req.session.msg});
   });
   app.post('/admin/user/create', users.UserCreate);
   app.get('/admin/user/list/json', users.UserListJSON);
@@ -34,7 +36,7 @@ module.exports = function(app) {
     }
     res.render('AdminUserList', {username: req.session.username});
   });
-  app.post('/admin/user/:id/delete', users.UserDelete);
+  app.get('/admin/user/delete/:id', users.UserDelete);
   //
   // User Pages
   //
@@ -69,5 +71,11 @@ module.exports = function(app) {
     req.session.destroy(function(){
       res.redirect('/user/login');
     });
+  });
+  //
+  // HTTP error codes
+  //
+  app.get('*', function(req, res){
+    res.send('what??? (404): Page not Found', 404);
   });
 };

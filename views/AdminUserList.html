@@ -39,6 +39,7 @@
         <tr>
         <th>UserName</th>
         <th>Email</th>
+        <th>Options</th>
         </tr>
       </thead>
       <tbody>
@@ -53,7 +54,7 @@
     $.getJSON('/admin/user/list/json', function(data) {
       var items = [];
         $.each(data, function(key, val) {
-          items.push('<tr> <td>\n <a href="/admin/profile/modify/' + val.username + '">' + val.username + '</a></td> \n <td>' + val.email + '</td> \n </tr>' );
+          items.push('<tr> <td>\n <a href="/admin/profile/modify/' + val.username + '">' + val.username + '</a></td> \n <td>' + val.email + '</td> \n <td><a href="/admin/user/delete/' + val.username + '"> Delete ' + val.username + '</a></td></tr>' );
          });
          $('<tbody/>', {
            html: items.join('')
