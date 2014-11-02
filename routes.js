@@ -75,7 +75,7 @@ module.exports = function(app) {
   //
   // HTTP error codes
   //
-  app.get('*', function(req, res){
-    res.send('what??? (404): Page not Found', 404);
-  });
+  //app.get('*', function(req, res){
+  //  res.send('what??? (404): Page not Found', 404);
+  //});
 };

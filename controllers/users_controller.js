@@ -61,13 +61,13 @@ exports.UserCreate = function(req, res){
   user.save(function(err) {
     if (err){
       res.session.error = err;
-      res.redirect('/user/create');
+      res.redirect('/admin/user/create');
     } else {
       //TODO:  Add logic to check configuration file for user regirstration
       //req.session.user = user.id;
       //req.session.username = user.username;
       //req.session.msg = 'Authenticated as ' + user.username;
-      res.redirect('/user/list');
+      res.redirect('/admin/user/list');
     }
   });
 };
@@ -109,18 +109,18 @@ exports.UserModifyJSON = function(req, res) {
 // TODO: something is borken here:
 // Admin - update user modification
 exports.AdminUserUpdate = function(req, res) {
-  User.findOne({_id : req.body.username})
+  User.findOne({ _id: req.body.username })
   .exec(function(err, user) {
-  user.set('email', req.body.email);
-  user.set('sec_question', req.body.sec_question);
-  user.set('sec_answer', req.body.sec_answer);
-  user.save(function(err) {
-    if (err) {
-      res.session.error = err;
-    } else {
-      res.session.msg = 'User Updated.';
-    } res.redirect('/admin/user/list');
-  });
+    user.set('email', req.body.email);
+    user.set('sec_question', req.body.sec_question);
+    user.set('sec_answer', req.body.sec_answer);
+    user.save(function(err) {
+      if (err) {
+        res.session.error = err;
+      } else {
+        res.session.msg = 'User Updated.';
+      } res.redirect('/admin/user/list');
+    });
   });
 };
 //
@@ -150,7 +150,7 @@ exports.UserUpdate = function(req, res){
       } else {
         req.session.msg = 'User Updated.';
       }
-      res.redirect('/user/profile/modify');
+      res.redirect('/');
     });
   });
 };

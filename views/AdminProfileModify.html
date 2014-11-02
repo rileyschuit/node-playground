@@ -7,7 +7,7 @@
 </head>
 <body>
   <div class="container" ng-controller="myController">
-    <h1>Modify User</h1><p class="lead">Modify YOUR Profile</p>
+    <h1>Modify User</h1><p class="lead">Modify USER Profile</p>
     <form role="form" action="/admin/profile/update" method="POST" style="max-width: 300px;">
       <div class="form-group">
       UserName: <br>
@@ -20,8 +20,8 @@
         <input type="text" placeholder="Security Question" name="sec_question" class="form-control"></div>
       <div class="form-group">
         Security Answer:
-        <input type="text" placeholder="Security Answer" name="sec_answer" class="form-control"></div>
-      <a class="btn btn-primary btn-default" href="/admin/profile/update" role="button">Update</a>
+        <input type="text" placeholder="Security Answer" name="sec_answer" ng-model="user.sec_answer" class="form-control"></div>
+      <input type="submit" class="btn btn-primary btn-default" role="buttom" value="Save">
       </div>
     </form>
   </div>
@@ -30,12 +30,12 @@
   <script>
     $(document).ready(function(){
       var userid = window.location.pathname.split("/");
+  //    alert(userid[4]);
       $.getJSON('/admin/profile/modify/' + userid[4] + '/json', function(data) {
         $('input[name="username"]').val(data["username"]);
         $('input[name="email"]').val(data["email"]);
         $('input[name="sec_question"]').val(data["sec_question"]);
         $('input[name="sec_answer"]').val(data["sec_answer"]);
-        $form.attr('action', $form.attr('action').replace('user-to-delete', userid[4]));
       });
     });
   </script>
