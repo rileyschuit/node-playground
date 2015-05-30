@@ -1,14 +1,8 @@
-<!doctype html>
-<html>
-<head>
-  <title>User Login and Sessions</title>
-  <link rel="stylesheet" type="text/css" 
-      href="/public/css/bootstrap.min.css" />
-</head>
+<% include Header.html %>
 <body>
   <div class="container" ng-controller="myController">
     <h1>Modify User</h1><p class="lead">Modify USER Profile</p>
-    <form role="form" action="/admin/profile/update" method="POST" style="max-width: 300px;">
+    <form role="form" action="/admin/user/update" method="POST" style="max-width: 300px;">
       <div class="form-group">
       UserName: <br>
         <input type="text" placeholder="Username" name="username" disabled class="form-control"></div>
@@ -30,8 +24,7 @@
   <script>
     $(document).ready(function(){
       var userid = window.location.pathname.split("/");
-  //    alert(userid[4]);
-      $.getJSON('/admin/profile/modify/' + userid[4] + '/json', function(data) {
+      $.getJSON('/admin/user/' + userid[4] + '/json', function(data) {
         $('input[name="username"]').val(data["username"]);
         $('input[name="email"]').val(data["email"]);
         $('input[name="sec_question"]').val(data["sec_question"]);

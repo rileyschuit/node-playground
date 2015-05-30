@@ -1,14 +1,8 @@
-<!doctype html>
-<html>
-<head>
-  <title>User Login and Sessions</title>
-  <link rel="stylesheet" type="text/css" 
-      href="/public/css/bootstrap.min.css" />
-</head>
+<% include Header.html %>
 <body>
   <div class="container" ng-controller="myController">
     <h1>Modify User</h1><p class="lead">Modify YOUR Profile</p>
-    <form role="form" action="/user/profile/update" method="POST" style="max-width: 300px;">
+    <form role="form" action="/user/profile/json" method="POST" style="max-width: 300px;">
       <div class="form-group">
       UserName: <br>
         <input type="text" placeholder="Username" name="username" disabled class="form-control"></div>
@@ -28,10 +22,10 @@
   <hr><%= msg %>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="/public/js/bootstrap.min.js"></script>
-  <script src="http://code.angularjs.org/1.2.9/angular.min.js"></script>
   <script>
     $(document).ready(function(){
-      $.getJSON('/user/profile/json', function(data) {
+      var userid = window.location.pathname.split("/");
+      $.getJSON('/user/profile/' + userid[4] + '/json', function(data) {
         $('input[name="username"]').val(data["username"]);
         $('input[name="email"]').val(data["email"]);
         $('input[name="sec_question"]').val(data["sec_question"]);

@@ -5,25 +5,6 @@ function hashPW(pwd){
   return crypto.createHash('sha256').update(pwd).
          digest('base64').toString();
 }
-// TODO: Work this into intialization with first deployment
-exports.Initialization = function(callback) {
-  User.findOne({ username: 'admin' })
-  .exec(function(err,user){
-    if (!user) {
-      err = 'No admin user!  Better create one (admin/admin)';
-      var user= new User({username: 'admin'});
-      user.set('password', hashPW());
-      user.save(function() {
-        if (err){
-          res.session.error = err;
-          console.log(err);
-        } else {
-          console.log('there is an admin user, no need ot create one');
-        }
-      });
-    };
-  });
-};
 // Public - User Login
 exports.UserLogin = function(req, res){
   User.findOne({ username: req.body.username })
@@ -38,7 +19,7 @@ exports.UserLogin = function(req, res){
         req.session.msg = 'Authenticated as ' + user.username;
         res.redirect('/');
       });
-    }else{
+    } else {
       err = 'Authentication failed.';
     }
     if(err){
@@ -49,11 +30,13 @@ exports.UserLogin = function(req, res){
     }
   });
 };
-//
-//
+/*
+  ------------------ ADMIN ----------------------   
+*/
+
 // Admin - User Creation
 exports.UserCreate = function(req, res){
-  var user = new User({username:req.body.username});
+  var user = new User({username: req.body.username});
   user.set('hashed_password', hashPW(req.body.password));
   user.set('email', req.body.email);
   user.set('sec_question', req.body.sec_question);
@@ -63,10 +46,6 @@ exports.UserCreate = function(req, res){
       res.session.error = err;
       res.redirect('/admin/user/create');
     } else {
-      //TODO:  Add logic to check configuration file for user regirstration
-      //req.session.user = user.id;
-      //req.session.username = user.username;
-      //req.session.msg = 'Authenticated as ' + user.username;
       res.redirect('/admin/user/list');
     }
   });
@@ -97,7 +76,7 @@ exports.UserListJSON = function(req, res) {
 };
 // Admin - find user for modification
 exports.UserModifyJSON = function(req, res) {
-  User.findOne({ username: req.params.id})
+  User.findOne({ username: req.params.username})
   .exec(function(err, users) {
     if (!users) {
       res.json(404, {msg: 'No User found'})
@@ -106,10 +85,9 @@ exports.UserModifyJSON = function(req, res) {
     };
   });
 };
-// TODO: something is borken here:
 // Admin - update user modification
 exports.AdminUserUpdate = function(req, res) {
-  User.findOne({ _id: req.body.username })
+  User.findOne({ username: req.body.username })
   .exec(function(err, user) {
     user.set('email', req.body.email);
     user.set('sec_question', req.body.sec_question);
@@ -123,9 +101,20 @@ exports.AdminUserUpdate = function(req, res) {
     });
   });
 };
-//
-//
-//
+// Admin - Get specific user data
+exports.getUserJSON = function(req, res) {
+  User.findOne({ username: req.params.id})
+  .exec(function(err, user) {
+    if (!user){
+      res.json(404, {err: 'User Not Found.'});
+    } else {
+      res.json(user);
+    }
+  });
+};
+/*
+-------------------- USER --------------------
+*/
 // User - JSON profile data
 exports.getUserProfile = function(req, res) {
   User.findOne({ _id: req.session.user })
@@ -139,7 +128,7 @@ exports.getUserProfile = function(req, res) {
 };
 // User - update user details
 exports.UserUpdate = function(req, res){
-  User.findOne({ _id: req.session.user })
+  User.findOne({ username: req.session.username })
   .exec(function(err, user) {
     user.set('email', req.body.email);
     user.set('sec_question', req.body.sec_question);
