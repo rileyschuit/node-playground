@@ -10,6 +10,9 @@ var mongoose = require('mongoose');
 require('./models/users_model.js');
 var config = require('./configuration.json');
 
+// Seeding for development:
+require('./models/user-seed.js');
+
 app.configure(function () {
   app.set('ip', process.env.IP || config.site.ip);
   app.set('port', process.env.PORT || config.site.port);
