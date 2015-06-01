@@ -74,17 +74,7 @@ exports.UserListJSON = function(req, res) {
     };
   });
 };
-// Admin - find user for modification
-exports.UserModifyJSON = function(req, res) {
-  User.findOne({ username: req.params.username})
-  .exec(function(err, users) {
-    if (!users) {
-      res.json(404, {msg: 'No User found'})
-    } else {
-      res.json(users);
-    };
-  });
-};
+
 // Admin - update user modification
 exports.AdminUserUpdate = function(req, res) {
   User.findOne({ username: req.body.username })
@@ -93,11 +83,12 @@ exports.AdminUserUpdate = function(req, res) {
     user.set('sec_question', req.body.sec_question);
     user.set('sec_answer', req.body.sec_answer);
     user.save(function(err) {
-      if (err) {
+      if (err){
         res.session.error = err;
       } else {
-        res.session.msg = 'User Updated.';
-      } res.redirect('/admin/user/list');
+        req.session.msg = 'User Updated.';
+      }
+      res.redirect('/');
     });
   });
 };
@@ -117,7 +108,7 @@ exports.getUserJSON = function(req, res) {
 */
 // User - JSON profile data
 exports.getUserProfile = function(req, res) {
-  User.findOne({ _id: req.session.user })
+  User.findOne({ username: req.params.id})
   .exec(function(err, user) {
     if (!user){
       res.json(404, {err: 'User Not Found.'});

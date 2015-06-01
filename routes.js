@@ -75,9 +75,9 @@ module.exports = function(app) {
   //  res.send('what??? (404): Page not Found', 404);
   //});
 // TODO:  Resort, make this simpler to read...
-  app.get('/admin/user/list/json', users.UserListJSON);
+  app.get('/admin/user/list/json', users.UserListJSON);  //TODO:  Require admin
   app.get('/admin/user/:id/json', users.getUserJSON);
-  app.post('/admin/user/update', users.UserModifyJSON);
+  app.post('/admin/user/update', users.AdminUserUpdate);
 
   app.get('/user/profile/:id/json', users.getUserProfile);
   app.post('/user/profile/json', users.UserUpdate);
