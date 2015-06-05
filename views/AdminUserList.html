@@ -13,7 +13,8 @@
       </div>
       <form role="form" class="navbar-form navbar-right">
         <a class="navbar-brand">
-          <% if (username == 'admin') { %> <a href="/admin/user/list", class="btn btn-sm btn-primary"> Manage </a> <% } %>
+          <% if (username == 'admin') { 
+            %> <a href="/admin/user/create", class="btn btn-sm btn-info"> Create </a> <a href="/admin/user/list", class="btn btn-sm btn-primary"> Manage </a> <% } %>
           <a href="/user/profile/modify", class="btn btn-sm btn-success"><%= username %></a> 
           <a href="/user/logout", class="btn btn-sm btn-danger"> Logout</a>
         </form>
